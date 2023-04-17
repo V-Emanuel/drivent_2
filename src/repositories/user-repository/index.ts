@@ -21,9 +21,18 @@ async function create(data: Prisma.UserUncheckedCreateInput) {
   });
 }
 
+async function findUserById(id: number) {
+  return prisma.user.findFirst({
+    where: {
+      id: id,
+    },
+  });
+}
+
 const userRepository = {
   findByEmail,
   create,
+  findUserById,
 };
 
 export default userRepository;
