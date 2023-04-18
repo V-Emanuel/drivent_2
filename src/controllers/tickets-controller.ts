@@ -13,8 +13,9 @@ export async function getTicketsType(req: Request, res: Response) {
 }
 
 export async function getTicket(req: Request, res: Response) {
+  const userId = res.locals.userId;
   try {
-    const ticket = await ticketsService.getTicket();
+    const ticket = await ticketsService.getTicket(userId);
     return res.status(httpStatus.OK).send(ticket);
   } catch (err) {
     return res.status(httpStatus.NOT_FOUND).send({});
@@ -27,9 +28,8 @@ export async function postTicket(req: Request, res: Response, next: NextFunction
   try {
     const ticket = await ticketsService.createTicket(userId, ticketTypeId);
     res.status(httpStatus.CREATED).send(ticket);
-  } catch (e) {
-    console.log(e);
-    if (e.name != 'UnauthorizedError') return next(e);
+  } catch (error) {
+    if (error.name != 'UnauthorizedError') return next(error);
     return res.status(httpStatus.UNAUTHORIZED).send({});
   }
 }

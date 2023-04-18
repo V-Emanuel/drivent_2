@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { Ticket, TicketType } from '@prisma/client';
 import { prisma } from '@/config';
 import { TicketReturn } from '@/protocols';
 
@@ -6,8 +7,21 @@ async function findTicketsTypes() {
   const data = await prisma.ticketType.findMany();
   return data;
 }
-async function findTicket() {
-  const data = await prisma.ticket.findMany();
+
+async function findTicket(userId: number): Promise<Ticket> {
+  const data = await prisma.ticket.findFirst({
+    where: {
+      id: userId,
+    },
+  });
+  return data;
+}
+async function findTicketTypeById(ticketTypeId: number): Promise<TicketType> {
+  const data = await prisma.ticketType.findFirst({
+    where: {
+      id: ticketTypeId,
+    },
+  });
   return data;
 }
 
@@ -44,10 +58,21 @@ async function createTicket(ticketTypeId: number, enrollmentId: number): Promise
   });
 }
 
+async function updateTicket(ticketId: number) {
+  return await prisma.ticket.update({
+    where: { id: ticketId },
+    data: {
+      status: 'PAID',
+    },
+  });
+}
+
 const ticketsRepository = {
   findTicketsTypes,
   findTicket,
   createTicket,
+  updateTicket,
+  findTicketTypeById,
 };
 
 export default ticketsRepository;

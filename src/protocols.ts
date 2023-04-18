@@ -45,3 +45,25 @@ export type TicketReturn = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type PaymentsType = {
+  ticketId: number;
+  cardData: {
+    issuer: string;
+    number: number;
+    name: string;
+    expirationDate: Date;
+    cvv: number;
+  };
+};
+
+export type PaymentDataType = {
+  ticketId: number;
+  cardData: {
+    issuer: string;
+    number: number;
+    name: string;
+    expirationDate: Date;
+    cvv: number;
+  };
+};
